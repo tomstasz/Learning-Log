@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Base for learning_logs</title>
+</head>
+<body>
+<p>
+    <a href="{% url 'learning_logs:index' %}">Learning Log</a> - {# call for namespace defined in main urls.py #}
+                                                                 {# and specific file inside that namespace #}
+    <a href="{% url 'learning_logs:topics' %}">Topics</a> -
+    {% if user.is_authenticated %}  {# in django auth system every template has user variable and attribute 'is_auth' #}
+        Hello, {{ user.username }}.
+    {% else %}
+        <a href="{% url 'users:login' %}">log in</a>
+    {% endif %}
+</p>
+
+
+{% block content %}
+
+{% endblock %}
+
+</body>
+</html>
