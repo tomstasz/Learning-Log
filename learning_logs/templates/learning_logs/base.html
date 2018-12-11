@@ -11,6 +11,7 @@
     <a href="{% url 'learning_logs:topics' %}">Topics</a> -
     {% if user.is_authenticated %}  {# in django auth system every template has user variable and attribute 'is_auth' #}
         Hello, {{ user.username }}.
+        <a href="{% url 'users:logout' %}">log out</a>
     {% else %}
         <a href="{% url 'users:login' %}">log in</a>
     {% endif %}

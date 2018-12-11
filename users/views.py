@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.template.response import TemplateResponse
+from django.urls import reverse
 from django.views import View
 
 from users.forms import LoginForm
@@ -27,3 +28,8 @@ class LoginView(View):
         else:
             ctx.update({'message': "Your username and password didn't match. Please try again."})
         return TemplateResponse(request, 'users/login.html', ctx)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect(reverse('learning_logs:index'))
