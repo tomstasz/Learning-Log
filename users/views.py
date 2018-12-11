@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -33,3 +34,21 @@ class LoginView(View):
 def logout_view(request):
     logout(request)
     return redirect(reverse('learning_logs:index'))
+
+
+def register(request):
+
+    if request.method == 'GET':
+        form = UserCreationForm()
+    else:
+        form = UserCreationForm(request.POST)
+
+        if form.is_valid():
+            new_user = form.save()
+            authenticated_user = authenticate(username=new_user.username,
+                                              password=request.POST['password1'])  # user enters pass two times to match
+            login(request, authenticated_user)
+            return redirect(reverse('learning_logs:index'))
+
+    ctx = {'form': form}
+    return TemplateResponse(request, 'users/register.html', ctx)
