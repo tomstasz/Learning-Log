@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -21,6 +22,7 @@ def topics(request):
     return render(request, 'learning_logs/topics.html', ctx)
 
 
+@login_required
 def topic(request, topic_id):
     topic = Topic.objects.get(id=topic_id)
     entries = topic.entry_set.order_by('-date_added')
@@ -31,7 +33,8 @@ def topic(request, topic_id):
     return render(request, 'learning_logs/topic.html', ctx)
 
 
-class NewTopic(View):
+class NewTopic(LoginRequiredMixin, View):
+    login_url = 'users:login'
 
     def get(self, request):
         form = TopicForm
@@ -47,7 +50,8 @@ class NewTopic(View):
             return HttpResponseRedirect(reverse('learning_logs:topics'))
 
 
-class NewEntry(View):
+class NewEntry(LoginRequiredMixin, View):
+    login_url = 'users:login'
 
     def get(self, request, topic_id):
         topic = Topic.objects.get(id=topic_id)
@@ -68,6 +72,7 @@ class NewEntry(View):
             return HttpResponseRedirect(reverse('learning_logs:topic', args=[topic_id]))
 
 
+@login_required
 def edit_entry(request, entry_id):
     entry = Entry.objects.get(id=entry_id)
     topic = entry.topic
