@@ -12,6 +12,12 @@ def index(request):
     return render(request, 'learning_logs/index.html')
 
 
+def check_topic_owner(request, topic_to_check):
+    if topic_to_check.owner != request.user:
+        raise Http404
+
+
+
 @login_required
 def topics(request):
     topics = Topic.objects.filter(owner=request.user).order_by('date_added')
@@ -25,8 +31,7 @@ def topics(request):
 @login_required
 def topic(request, topic_id):
     topic = Topic.objects.get(id=topic_id)
-    if topic.owner != request.user:
-        raise Http404
+    check_topic_owner(request, topic)
     entries = topic.entry_set.order_by('-date_added')
     ctx = {
         'entries': entries,
@@ -69,6 +74,7 @@ class NewEntry(LoginRequiredMixin, View):
     def post(self, request, topic_id):
         topic = Topic.objects.get(id=topic_id)
         form = EntryForm(data=request.POST)
+        check_topic_owner(request, topic)
         if form.is_valid():
             new_entry = form.save(commit=False)  # commit=False, without saving to database yet
             new_entry.topic = topic
@@ -80,8 +86,7 @@ class NewEntry(LoginRequiredMixin, View):
 def edit_entry(request, entry_id):
     entry = Entry.objects.get(id=entry_id)
     topic = entry.topic
-    if topic.owner != request.user:
-        raise Http404
+    check_topic_owner(request, topic)
 
     if request.method == 'GET':
         form = EntryForm(instance=entry)
