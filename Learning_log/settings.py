@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     # Learning_log apps
     'learning_logs',
     'users',
+    #  Third party apps
+    'bootstrap3',
 ]
 
 MIDDLEWARE = [
@@ -126,3 +128,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 LOGIN_URL = '/users/login/'
+
+# Django-bootstrap3 settings
+BOOTSTRAP3 = {
+    'include_jquery': True,
+}
