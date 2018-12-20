@@ -1,2 +1,2 @@
 # Learning-Log
-Python Crash Course project
+Log allowing users to add entries each time they learn something new about particular topic. 
