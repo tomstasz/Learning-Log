@@ -76,7 +76,7 @@ class NewEntry(LoginRequiredMixin, View):
         form = EntryForm(data=request.POST)
         check_topic_owner(request, topic)
         if form.is_valid():
-            new_entry = form.save(commit=False)  # commit=False, without saving to database yet
+            new_entry = form.save(commit=False)
             new_entry.topic = topic
             new_entry.save()
             return HttpResponseRedirect(reverse('learning_logs:topic', args=[topic_id]))
@@ -91,7 +91,7 @@ def edit_entry(request, entry_id):
     if request.method == 'GET':
         form = EntryForm(instance=entry)
     else:
-        form = EntryForm(instance=entry, data=request.POST)  # instance=entry, form is pre-filled with existing info
+        form = EntryForm(instance=entry, data=request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('learning_logs:topic', args=[topic.id]))
